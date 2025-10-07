@@ -1,0 +1,23 @@
+{
+  "name": "butler-ctf-hard",
+  "version": "1.0.0",
+  "description": "CTF challenge repo for Butler Hard Web3 challenge",
+  "scripts": {
+  "compile": "npx hardhat compile",
+  "deploy": "node scripts/deploy.js",
+  "verify": "npx hardhat run solutions/scripts/run_solution.js",
+  "reveal": "node solutions/scripts/reveal_flag.js"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^3.0.0",
+    "hardhat": "^2.26.3",
+    "install": "^0.13.0",
+    "npm": "^11.6.1"
+  },
+  "dependencies": {
+    "ethers": "^6.15.0",
+    "express": "^4.18.2",
+    "body-parser": "^1.20.2",
+    "yargs": "^17.7.2"
+  }
+}

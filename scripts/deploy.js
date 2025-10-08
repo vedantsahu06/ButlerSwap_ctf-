@@ -1,20 +1,29 @@
 // scripts/deploy.js
 const hre = require("hardhat");
 const { ethers } = hre;
+// load .env if present
+try { require('dotenv').config(); } catch (e) {}
+
+const argv = require('yargs/yargs')(process.argv.slice(2)).argv;
 
 async function main() {
-    
     const [deployer] = await ethers.getSigners();
     console.log("Deploying contracts with account:", deployer.address);
 
     
-           const merkleRoot = "0x0000000000000000000000000000000000000000000000000000000000000000";
-
-            const permitSigner = deployer.address;
-
+    const merkleRoot = argv.merkleRoot || process.env.MERKLE_ROOT || "0x0000000000000000000000000000000000000000000000000000000000000000";
     
+    const permitSigner = argv.permitSigner || process.env.PERMIT_SIGNER || deployer.address;
+
+    // flag can be passed via env FLAG_PHRASE or --flag
+    let flag = argv.flag || process.env.FLAG_PHRASE;
+    if (!flag) {
+        console.warn('Warning: FLAG_PHRASE not set.');
+        flag = 'CTF{example-flag}';
+    }
+
     const Setup = await ethers.getContractFactory("Setup");
-    const setup = await Setup.deploy(merkleRoot, permitSigner);
+    const setup = await Setup.deploy(merkleRoot, permitSigner, flag);
 
     
     if (typeof setup.waitForDeployment === 'function') {

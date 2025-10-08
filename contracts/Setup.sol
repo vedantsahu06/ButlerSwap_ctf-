@@ -13,10 +13,12 @@ contract Setup {
     IToken public token2;
     IToken public token3;
     MerkleFlashLoan public flashProvider;
+    string private flag;
 
-    constructor(bytes32 merkleRoot, address permitSigner) {
+    constructor(bytes32 merkleRoot, address permitSigner, string memory flag_) {
         Gentleman g = new Gentleman(permitSigner);
         target = g;
+        flag = flag_;
 
         Token t1 = new Token(300_000);
         TokenWithFee t2 = new TokenWithFee(300_000, address(this), 200);
@@ -49,6 +51,12 @@ contract Setup {
             IToken(token2).balanceOf(address(target)) == 0 &&
             IToken(token3).balanceOf(address(target)) == 0
         );
+    }
+
+
+    function getFlag() public view returns (string memory) {
+        require(isSolved(), "not solved");
+        return flag;
     }
 
     // Diagnostic: return the three balances the contract sees for the target
